@@ -221,6 +221,12 @@ imgoptimize foto.png --resize-factor 2
 # Si la imagen es 4000x3000, resultado será 2000x1500
 ```
 
+#### Reducir dimensiones con división entera
+```sh
+imgoptimize foto.png --resize 12
+# Si la imagen es 1024x1024, resultado será 85x85 (1024//12 = 85)
+```
+
 #### Mantener metadatos EXIF
 ```sh
 imgoptimize foto.jpg --keep-metadata
@@ -259,7 +265,8 @@ imgoptimize foto.png --quality 95 --resize-factor 2 --keep-metadata --output-for
 | `--quality` | Calidad de compresión (1-100) | 85 |
 | `--lossless` | Compresión sin pérdida (solo WebP) | false |
 | `--keep-metadata` | Mantener metadatos EXIF | false |
-| `--resize-factor` | Factor de redimensionamiento | - |
+| `--resize-factor` | Factor de redimensionamiento (división flotante) | - |
+| `--resize` | Dividir dimensiones entre N (división entera) | - |
 | `--output-format` | Formato de salida (webp, jpg) | webp |
 | `--delete-original` | Eliminar archivo original | false |
 | `--no-rename` | No agregar "_optimized" al nombre | false |
@@ -294,7 +301,13 @@ imgoptimize captura.png --lossless --output-format webp
 
 ### Preparar imágenes para email
 ```sh
-imgoptimize documento.png --resize-factor 2 --quality 75 --output-format jpg
+imgoptimize documento.png --resize 2 --quality 75 --output-format jpg
+```
+
+### Reducir imágenes grandes para web
+```sh
+imgoptimize foto_4k.png --resize 4 --quality 85
+# 3840x2160 → 960x540
 ```
 
 ### Procesamiento automatizado

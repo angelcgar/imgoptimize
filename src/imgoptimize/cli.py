@@ -28,6 +28,7 @@ class ImageOptimizer:
         lossless: bool = False,
         keep_metadata: bool = False,
         resize_factor: Optional[float] = None,
+        resize: Optional[int] = None,
         output_format: str = 'webp',
         delete_original: bool = False,
         no_rename: bool = False
@@ -36,6 +37,7 @@ class ImageOptimizer:
         self.lossless = lossless
         self.keep_metadata = keep_metadata
         self.resize_factor = resize_factor
+        self.resize = resize
         self.output_format = output_format.lower()
         self.delete_original = delete_original
         self.no_rename = no_rename
@@ -88,8 +90,14 @@ class ImageOptimizer:
                     elif img.mode == 'P':
                         img = img.convert('RGBA' if 'transparency' in img.info else 'RGB')
             
+            # Redimensionar con --resize (división entera)
+            if self.resize and self.resize > 0:
+                new_width = img.width // self.resize
+                new_height = img.height // self.resize
+                img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+                print(f"   ↔️  Redimensionado: {img.width}x{img.height} (1/{self.resize} del tamaño original)")
             # Redimensionar si se especificó factor
-            if self.resize_factor and self.resize_factor != 1.0:
+            elif self.resize_factor and self.resize_factor != 1.0:
                 new_width = int(img.width / self.resize_factor)
                 new_height = int(img.height / self.resize_factor)
                 img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
@@ -205,6 +213,13 @@ Ejemplos:
     )
     
     parser.add_argument(
+        '--resize',
+        type=int,
+        metavar='N',
+        help='Dividir dimensiones entre N (ej: --resize 12 = 1/12 del tamaño original)'
+    )
+    
+    parser.add_argument(
         '--output-format',
         choices=['webp', 'jpg', 'jpeg'],
         default='webp',
@@ -235,12 +250,23 @@ def main():
         print("❌ Error: --resize-factor debe ser mayor que 0")
         sys.exit(1)
     
+    # Validar resize
+    if args.resize is not None and args.resize <= 0:
+        print("❌ Error: --resize debe ser un entero mayor que 0")
+        sys.exit(1)
+    
+    # Validar que no se usen ambas opciones a la vez
+    if args.resize is not None and args.resize_factor is not None:
+        print("❌ Error: No se puede usar --resize y --resize-factor al mismo tiempo")
+        sys.exit(1)
+    
     # Crear optimizador
     optimizer = ImageOptimizer(
         quality=args.quality,
         lossless=args.lossless,
         keep_metadata=args.keep_metadata,
         resize_factor=args.resize_factor,
+        resize=args.resize,
         output_format=args.output_format,
         delete_original=args.delete_original,
         no_rename=args.no_rename
