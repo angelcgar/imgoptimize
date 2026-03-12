@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
 authors = [
-    {name = "Angel", email = "angelcg@example.com"}
+    {name = "Angel", email = "146035436+angelcgar@users.noreply.github.com"}
 ]
 keywords = ["image", "optimization", "webp", "cli"]
 classifiers = [
@@ -33,4 +33,4 @@ dependencies = [
 imgoptimize = "imgoptimize.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/angelcg/imgoptimize"
+Homepage = "https://github.com/angelcgar/imgoptimize"

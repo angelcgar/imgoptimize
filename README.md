@@ -4,6 +4,8 @@ Tu objetivo es **refactorizar y modernizar completamente** un script CLI antiguo
 
 ---
 
+Esto es un hard snack
+
 ## Contexto del proyecto
 Tenemos un **script personal de línea de comandos** para optimizar imágenes en local.
 
